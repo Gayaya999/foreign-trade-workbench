@@ -1,0 +1,24 @@
+# Local operating-system files
+.DS_Store
+Thumbs.db
+
+# Local credentials and exported business data
+.env
+.env.*
+!.env.example
+exports/
+private/
+
+# Local prototype snapshots and unrelated workspace materials
+*备份.html
+*.mp4
+*.mov
+*.docx
+疆脉织新_横屏样片/
+
+# Optional future tooling
+node_modules/
+coverage/
+
+# Local CI config; publishing it requires GitHub workflow authorization
+/.github/workflows/check.yml
