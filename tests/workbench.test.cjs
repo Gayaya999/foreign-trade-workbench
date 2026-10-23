@@ -40,3 +40,15 @@ test('sidebar modules and neutral background',()=>{
  assert(!html.includes('radial-gradient'));
  dom.window.close();
 });
+
+test('personal center is in the sidebar and its local dialog opens and closes',()=>{
+ const dom=makeApp();const d=dom.window.document;
+ assert(d.querySelector('.module-sidebar .sidebar-bottom #avatar-symbol'));
+ assert.equal(d.querySelectorAll('#avatar-symbol').length,1);
+ assert.equal(d.querySelector('.topbar #avatar-symbol'),null);
+ d.querySelector('.sidebar-profile').click();
+ assert.equal(d.querySelector('#personal-center').open,true);
+ d.querySelector('[data-chat-action="close-personal-center"]').click();
+ assert.equal(d.querySelector('#personal-center').open,false);
+ dom.window.close();
+});

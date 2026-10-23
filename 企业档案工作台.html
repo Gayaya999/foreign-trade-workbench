@@ -273,6 +273,26 @@ body.conversational{padding:0;background:#f6f6f6}
 body.conversational .app{width:100%;max-width:none;margin:0;border:0;border-radius:0;box-shadow:none;background:#f6f6f6}
 .module-sidebar{border:0;background:#f6f6f6}
 
+  
+/* Personal center stays at the bottom of the navigation module. */
+.sidebar-bottom{margin-top:auto;padding-top:30px;flex-shrink:0}
+.sidebar-bottom .module-sidebar-foot{margin:0;padding:0 10px 18px}
+.sidebar-profile{display:flex;align-items:center;gap:11px;width:100%;min-height:52px;padding:6px 8px;background:transparent;border:0;border-radius:15px;text-align:left}
+.sidebar-profile:hover{background:#e7e7e7}
+.sidebar-profile .avatar{display:grid;width:40px;height:40px;flex-shrink:0;background:#fff;color:#555}
+.sidebar-profile .avatar svg{width:19px;height:19px}
+.sidebar-profile-label{font-size:12px;color:#606060}
+.personal-center{width:min(370px,calc(100vw - 32px));padding:24px;border:0;border-radius:24px;background:#fff}
+.personal-center::backdrop{background:#22222226;backdrop-filter:blur(3px)}
+.personal-center-header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.personal-center-header h2{font-size:18px;font-weight:550}
+.personal-center-header .btn{min-height:30px;padding:6px}
+.personal-center>p{margin-top:15px;font-size:12px;color:#888;line-height:1.9}
+.personal-center-actions{display:flex;gap:9px;margin-top:26px}
+.personal-center-actions .btn{flex:1;min-height:40px;font-size:12px}
+@media(max-width:1050px){.sidebar-bottom{padding-top:24px}.sidebar-bottom .module-sidebar-foot,.sidebar-profile-label{display:none}.sidebar-profile{justify-content:center;padding:6px 0}.sidebar-profile .avatar{width:36px;height:36px}}
+@media(max-width:600px){.module-sidebar{padding-bottom:calc(12px + env(safe-area-inset-bottom))}.sidebar-profile{min-height:43px;border-radius:13px}.sidebar-profile .avatar{width:34px;height:34px}.sidebar-profile .avatar svg{width:17px;height:17px}}
+
   </style>
 </head>
 <body>
@@ -283,14 +303,15 @@ body.conversational .app{width:100%;max-width:none;margin:0;border:0;border-radi
       <button type="button" class="space-pill" data-chat-action="profile-editor" data-step="0" title="编辑企业信息" aria-label="编辑企业信息"><span class="space-name">企业空间</span><span class="space-arrow" aria-hidden="true">⌄</span></button>
       <p class="module-nav-label">工作空间</p>
       <nav class="nav workspace-nav" id="main-nav" aria-label="主要工作区"></nav>
-      <div class="module-sidebar-foot"><span class="sidebar-local-mark" aria-hidden="true"></span><span>企业资料共用<br>任务独立管理</span></div>
+      <div class="sidebar-bottom"><div class="module-sidebar-foot"><span class="sidebar-local-mark" aria-hidden="true"></span><span>企业资料共用<br>任务独立管理</span></div><button type="button" class="sidebar-profile" data-chat-action="personal-center" aria-label="个人中心" title="个人中心"><span class="avatar" id="avatar-symbol" aria-hidden="true"></span><span class="sidebar-profile-label">个人中心</span></button></div>
     </aside>
     <header class="topbar">
       <div class="module-heading"><h1 id="breadcrumb">企业档案</h1><span id="module-description">整理企业信息，建立共用档案</span></div>
-      <div class="top-actions"><span class="save-indicator" id="save-indicator" aria-live="polite"></span><button type="button" class="btn icon top-tool" data-action="import" title="导入档案 JSON" aria-label="导入档案 JSON"><svg viewBox="0 0 24 24"><path d="M12 16V4m-4 4 4-4 4 4M4 15v5h16v-5"/></svg></button><button type="button" class="btn icon top-tool" data-action="export" title="导出档案、任务与对话 JSON，不含附件原文件" aria-label="导出档案、任务与对话 JSON"></button><span class="avatar" id="avatar-symbol" aria-hidden="true"></span></div>
+      <div class="top-actions"><span class="save-indicator" id="save-indicator" aria-live="polite"></span><button type="button" class="btn icon top-tool" data-action="import" title="导入档案 JSON" aria-label="导入档案 JSON"><svg viewBox="0 0 24 24"><path d="M12 16V4m-4 4 4-4 4 4M4 15v5h16v-5"/></svg></button><button type="button" class="btn icon top-tool" data-action="export" title="导出档案、任务与对话 JSON，不含附件原文件" aria-label="导出档案、任务与对话 JSON"></button></div>
     </header>
     <main class="main" id="main-content"><div class="content" id="app-content"></div></main>
   </div>
+  <dialog id="personal-center" class="personal-center" aria-labelledby="personal-center-title"><header class="personal-center-header"><h2 id="personal-center-title">个人中心</h2><button type="button" class="btn icon ghost" data-chat-action="close-personal-center" aria-label="关闭个人中心"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></svg></button></header><p>当前为本地工作区，档案与对话保存在此浏览器。</p><div class="personal-center-actions"><button type="button" class="btn" data-action="import">导入资料</button><button type="button" class="btn primary" data-action="export">导出资料</button></div></dialog>
   <input id="import-file" type="file" accept=".json,application/json" hidden>
   <div class="toast-stack" id="toasts" role="status" aria-live="polite"></div>
   <dialog id="confirm-dialog" aria-labelledby="dialog-title"><h2 id="dialog-title"></h2><p id="dialog-message"></p><div class="dialog-actions"><button class="btn" id="dialog-cancel" type="button">取消</button><button class="btn primary" id="dialog-confirm" type="button">确认</button></div></dialog>
@@ -470,7 +491,7 @@ body.conversational .app{width:100%;max-width:none;margin:0;border:0;border-radi
   document.addEventListener('toggle',event=>{if(event.target.dataset.contextGroup)chatUI.groupOpen[event.target.dataset.contextGroup]=event.target.open;},true);
   document.addEventListener('input',event=>{if(event.target.dataset.chatInput){state.chat.inputs[activeView]=event.target.value;queueSave();resizeComposer();}});
   document.addEventListener('keydown',event=>{if(event.target.id==='conversation-input'&&event.key==='Enter'&&!event.shiftKey&&!event.isComposing&&event.keyCode!==229){event.preventDefault();sendChat();}});
-  document.addEventListener('click',event=>{const target=event.target.closest('[data-chat-action]');if(!target||target.disabled)return;const action=target.dataset.chatAction;if(action==='send')sendChat();else if(action==='answer')sendChat(target.dataset.answer);else if(action==='profile-editor'){chatUI.stateOpen=false;step=Math.max(0,Math.min(3,Number(target.dataset.step)||0));state.step=step;chatUI.editor='profile';render();}else if(action==='task-editor'){if(activeView==='profile')return;chatUI.stateOpen=false;chatUI.editor='task';render();}else if(action==='close-editor'){flushChips();persist();chatUI.editor=null;render();}else if(action==='toggle-context'){chatUI.contextCollapsed=!chatUI.contextCollapsed;render();}else if(action==='show-state'){chatUI.stateOpen=true;renderEditors();}else if(action==='close-state'){chatUI.stateOpen=false;renderEditors();}else if(action==='prefill-example'){state.chat.inputs[activeView]=activeView==='profile'?'公司叫示例清洁用品公司，我们是做商用清洁用品的工厂，支持 OEM，想开发澳大利亚的经销商。':activeView==='leads'?'这次想寻找澳大利亚的清洁用品经销商，排除清洁服务商。':'想为 LinkedIn 生成一篇采购指南，内容面向经销商采购人员，使用英语。';queueSave();render();document.getElementById('conversation-input').focus();}});
+  document.addEventListener('click',event=>{const target=event.target.closest('[data-chat-action]');if(!target||target.disabled)return;const action=target.dataset.chatAction;if(action==='personal-center'){document.getElementById('personal-center').showModal();}else if(action==='close-personal-center'){document.getElementById('personal-center').close();}else if(action==='send')sendChat();else if(action==='answer')sendChat(target.dataset.answer);else if(action==='profile-editor'){chatUI.stateOpen=false;step=Math.max(0,Math.min(3,Number(target.dataset.step)||0));state.step=step;chatUI.editor='profile';render();}else if(action==='task-editor'){if(activeView==='profile')return;chatUI.stateOpen=false;chatUI.editor='task';render();}else if(action==='close-editor'){flushChips();persist();chatUI.editor=null;render();}else if(action==='toggle-context'){chatUI.contextCollapsed=!chatUI.contextCollapsed;render();}else if(action==='show-state'){chatUI.stateOpen=true;renderEditors();}else if(action==='close-state'){chatUI.stateOpen=false;renderEditors();}else if(action==='prefill-example'){state.chat.inputs[activeView]=activeView==='profile'?'公司叫示例清洁用品公司，我们是做商用清洁用品的工厂，支持 OEM，想开发澳大利亚的经销商。':activeView==='leads'?'这次想寻找澳大利亚的清洁用品经销商，排除清洁服务商。':'想为 LinkedIn 生成一篇采购指南，内容面向经销商采购人员，使用英语。';queueSave();render();document.getElementById('conversation-input').focus();}});
 
   document.getElementById('brand-symbol').innerHTML=icon('building');document.getElementById('avatar-symbol').innerHTML=icon('user');document.querySelector('[data-action="export"]').innerHTML=icon('download');indicator(state.updatedAt||state.savedAt?'已从本机恢复':'尚未填写');render();
   </script>
